@@ -25,7 +25,7 @@ function checksExistsUserAccount(request, response, next) {
 
 app.post('/users', (request, response) => {
   const {name, username} = request.body;
-  const userFound = users.find((user) => user.username == username);
+  const userFound = users.find((user) => user.username === username);
 
   if (userFound){
       return response.status(400).json({error:"User already exists"}).send();
@@ -64,36 +64,36 @@ app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
     const {title, deadline} = request.body;
     const {id} = request.params;
     const {user} = request;
-    const todoFound = user.todos.find((todo) => todo.id == id);
+    const todoFound = user.todos.find((todo) => todo.id === id);
     if (!todoFound){
       return response.status(404).json({error:"Todo not found"}).send();
     }
     todoFound.title = title;
     todoFound.deadline = new Date(deadline);
-    return response.status(200).send();
+    return response.status(204).json(todoFound).send();
 });
 
 app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
   const {user} = request;
   const {id} = request.params;
-  const todoFound = user.todos.find((todo) => todo.id == id);
+  const todoFound = user.todos.find((todo) => todo.id === id);
   if (!todoFound){
     return response.status(404).json({error:"Todo not found"}).send();
   }
   todoFound.done = true;
-  return response.status(200).send();
+  return response.status(204).json(todoFound).send();
 });
 
 app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
   const {user} = request;
   const {id} = request.params;
-  const todoFound = user.todos.find((todo) => todo.id == id);
+  const todoFound = user.todos.find((todo) => todo.id === id);
 
   if (!todoFound){
     return response.status(404).json({error:"Todo not found"}).send();
   }
 
-  user.todos = user.todos.filter((todo) => todo.id != id);
+  user.todos = user.todos.filter((todo) => todo.id !== id);
   return response.status(204).send();
 });
 
